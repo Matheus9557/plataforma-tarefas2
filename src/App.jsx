@@ -1,33 +1,27 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { addTask, toggleTask, deleteTask } from "./store/tasksSlice";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Tasks from "./pages/Tasks";
+import TaskDetail from "./components/TaskDetail"; // seu componente
 
 export default function App() {
-  const tasks = useSelector(state => state.tasks.tasks);
-  const dispatch = useDispatch();
-  const [newTask, setNewTask] = useState("");
-
-  const handleAdd = () => {
-    if (!newTask) return;
-    dispatch(addTask({ id: Date.now().toString(), title: newTask, completed: false }));
-    setNewTask("");
-  };
-
   return (
-    <div>
-      <h1>Todo</h1>
-      <input value={newTask} onChange={e => setNewTask(e.target.value)} />
-      <button onClick={handleAdd}>Add</button>
+    <Router>
+      <div className="min-h-screen bg-gray-100">
+        <header className="bg-blue-600 text-white p-4 shadow">
+          <div className="container mx-auto flex justify-between items-center">
+            <h1 className="text-xl font-bold">ToDo List</h1>
+            <nav className="flex gap-4">
+              <Link to="/" className="hover:underline">Minhas Tarefas</Link>
+            </nav>
+          </div>
+        </header>
 
-      <ul>
-        {tasks.map(t => (
-          <li key={t.id}>
-            <input type="checkbox" checked={t.completed} onChange={() => dispatch(toggleTask(t.id))} />
-            {t.title}
-            <button onClick={() => dispatch(deleteTask(t.id))}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+        <main className="container mx-auto p-4">
+          <Routes>
+            <Route path="/" element={<Tasks />} />
+            <Route path="/task/:id" element={<TaskDetail />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }

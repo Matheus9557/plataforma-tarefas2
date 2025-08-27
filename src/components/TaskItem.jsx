@@ -18,10 +18,19 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
           className="w-5 h-5"
         />
         <div>
-          <p className={`font-medium ${task.completed ? "line-through text-gray-400" : ""}`}>
+          <p
+            className={`font-medium ${
+              task.completed ? "line-through text-gray-400" : ""
+            }`}
+          >
             {task.title}
           </p>
-          <span className={`text-xs px-2 py-1 rounded ${priorityColor[task.priority] || "bg-gray-200 text-gray-700"}`}>
+          <span
+            className={`text-xs px-2 py-1 rounded ${
+              priorityColor[task.priority] ||
+              "bg-gray-200 text-gray-700"
+            }`}
+          >
             {task.priority}
           </span>
         </div>
