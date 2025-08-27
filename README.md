@@ -26,7 +26,7 @@ A aplicação permite adicionar, editar, concluir e deletar tarefas, com priorid
 
     Clone o repositório:
 
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
+git clone https://github.com/Matheus9557/plataforma-tarefas2.git
 cd nome-do-repositorio
 
     Instale dependências:
