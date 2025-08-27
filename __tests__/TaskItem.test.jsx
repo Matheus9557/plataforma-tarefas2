@@ -1,31 +1,29 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import TaskItem from '../components/TaskItem';
-import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
+import { fireEvent, screen } from '@testing-library/react';
+import TaskItem from '../src/components/TaskItem';
+import { renderWithProviders } from './test-utils';
 
-describe('TaskItem', () => {
+test('TaskItem renderiza tarefa e chama callbacks', () => {
   const task = { id: 1, title: 'Teste', priority: 'Alta', completed: false };
+  const onToggleTask = jest.fn();
+  const onDeleteTask = jest.fn();
+  const onEditTask = jest.fn();
 
-  it('renderiza tarefa corretamente', () => {
-    render(<TaskItem task={task} onToggle={() => {}} onDelete={() => {}} onEdit={() => {}} />);
-    expect(screen.getByText('Teste')).toBeInTheDocument();
-    expect(screen.getByText('Alta')).toBeInTheDocument();
-  });
+  renderWithProviders(
+    <TaskItem
+      task={task}
+      onToggle={ () => onToggleTask(task.id) }
+      onDelete={ () => onDeleteTask(task.id) }
+      onEdit={ () => onEditTask(task) }
+    />
+  );
 
-  it('chama callbacks ao interagir', () => {
-    const onToggle = vi.fn();
-    const onDelete = vi.fn();
-    const onEdit = vi.fn();
+  fireEvent.click(screen.getByRole('checkbox'));
+  expect(onToggleTask).toHaveBeenCalledWith(task.id);
 
-    render(<TaskItem task={task} onToggle={onToggle} onDelete={onDelete} onEdit={onEdit} />);
+  fireEvent.click(screen.getByText(/editar/i));
+  expect(onEditTask).toHaveBeenCalledWith(task);
 
-    fireEvent.click(screen.getByRole('checkbox'));
-    expect(onToggle).toHaveBeenCalledTimes(1);
-
-    fireEvent.click(screen.getByText('Editar'));
-    expect(onEdit).toHaveBeenCalledTimes(1);
-
-    fireEvent.click(screen.getByText('Deletar'));
-    expect(onDelete).toHaveBeenCalledTimes(1);
-  });
+  fireEvent.click(screen.getByText(/deletar/i));
+  expect(onDeleteTask).toHaveBeenCalledWith(task.id);
 });
